@@ -1,79 +1,123 @@
-# Number-Plate-Recognition
-Number Plate Recognition Using OCR
-This project implements an Automatic Number Plate Recognition (ANPR) system using Optical Character Recognition (OCR) to extract license plate numbers from vehicle images. It integrates OpenCV for image processing and Pytesseract (Tesseract-OCR) for extracting characters from the license plate.
+Let's update the README to include the usage of the `.xml` file for plate detection and the `.h5` file for the CNN model, explaining why these are necessary for the project.
 
-Project Overview
-The aim of this project is to recognize vehicle license plates in real-time or from static images, typically used for traffic law enforcement and automated toll systems. By leveraging computer vision techniques and OCR, the system can accurately detect, extract, and read the text on a license plate.
+---
 
-This project focuses on the following tasks:
+ Number Plate Recognition Using OCR
 
-Image acquisition: Capturing or loading images of vehicles.
-Image processing: Preprocessing the image to isolate the number plate.
-Character extraction: Using Pytesseract to convert the isolated plate into text.
-Post-processing: Refining the recognized text to match license plate formats.
-
-Features
-Detects and recognizes vehicle license plates from images.
-Uses image processing techniques for better accuracy in detection and recognition.
-Low-cost implementation with Raspberry Pi and Camera Module for real-time applications.
-Python-based solution integrating OpenCV and Pytesseract.
-
-System Architecture
-Input: Image or video stream (captured using a camera or pre-recorded footage).
-Preprocessing:
-Grayscale conversion
-Gaussian blur and bilateral filtering
-Edge detection and contour detection
-License Plate Detection: Localization of number plate using contour-based techniques.
-OCR: Pytesseract extracts characters from the detected number plate region.
-Output: The recognized license plate number as a string.
-
-Installation
-Prerequisites
-Make sure you have Python 3 installed on your machine. Additionally, you'll need the following libraries:
-
-OpenCV
-Pytesseract
-Numpy
-Imutils (optional, for better contour manipulation)
-Steps:
-
-Install the required libraries:
-
-pip install opencv-python pytesseract numpy imutils
-Install Tesseract OCR:
-
-For Windows: Download and install Tesseract.
-For Linux: Install via package manager:
-
-sudo apt-get install tesseract-ocr
-Configure Pytesseract: Ensure the path to the Tesseract executable is correctly set in your script:
+This project implements an Automatic Number Plate Recognition (ANPR) system using Optical Character Recognition (OCR) along with a Convolutional Neural Network (CNN) for enhanced plate detection. The project integrates OpenCV for image processing, Pytesseract for extracting text, and utilizes a trained CNN model to improve the accuracy of number plate localization.
 
 
-pytesseract.pytesseract.tesseract_cmd = r'path_to_tesseract.exe'
-Usage
-Run the script:
-python number_plate_recognition.py
 
-Input an image or video stream:
+ Project Overview
+The goal of this project is to recognize vehicle license plates using a hybrid approach that combines traditional image processing methods with machine learning. The system leverages Haar Cascades (.xml files) for detecting the license plate region and a Convolutional Neural Network (CNN) stored in a `.h5` file for more robust plate recognition in challenging environments.
 
-The system will prompt you to input an image file path or use a connected camera to capture the image.
-Output:
+This project focuses on:
+1. Plate Detection: Using Haar Cascades for rapid number plate detection.
+2. Enhanced Detection: Utilizing a pre-trained CNN for improved accuracy in complex conditions (blurry images, bad lighting).
+3. Character Extraction: Using Pytesseract to extract characters from the number plate.
+4. Post-processing: Refining recognized text to match standard license plate formats.
 
-The system will output the recognized license plate number in the terminal and display the processed image with the detected plate highlighted.
-Example
+ Features
+- Detects and recognizes vehicle license plates using both traditional and deep learning techniques.
+- Integrates OpenCV, Haar Cascade classifiers, and a pre-trained CNN model.
+- Extracts characters using Pytesseract for OCR.
+- Designed for real-time applications with Raspberry Pi and Camera Module support.
 
+ System Architecture
 
+1. Input: Image or video stream.
+2. Preprocessing: 
+   - Grayscale conversion, blurring, and edge detection.
+   - Haar Cascade-based detection using a `.xml` file.
+   - Further plate refinement with CNN-based localization.
+3. License Plate Detection: First, use the Haar Cascade `.xml` file to detect the plate, then fine-tune detection using a CNN stored in `.h5`.
+4. OCR: Pytesseract extracts characters from the number plate region.
+5. Output: The recognized number plate is printed as a string.
+
+ Why Use `.xml` and `.h5` Files?
+
+1. .xml File (Haar Cascade Classifier):
+   - The `.xml` file contains a pre-trained Haar Cascade classifier used for detecting objects like license plates. Haar Cascades are simple but effective methods for object detection and are particularly useful for rapid prototyping in license plate recognition.
+   - This technique detects rectangular shapes, which can then be processed further.
+
+2. .h5 File (Pre-trained CNN):
+   - The `.h5` file stores a Convolutional Neural Network (CNN) model trained specifically for fine-tuning plate detection. The CNN can better handle complex cases, such as plates at different angles or in noisy environments.
+   - This enhances the detection step, making it more robust than traditional methods like Haar Cascades alone.
+
+ Installation
+
+ Prerequisites
+Make sure you have Python 3 installed. You will also need:
+- OpenCV
+- Pytesseract
+- Keras (for loading the CNN model)
+- TensorFlow (backend for Keras)
+- Numpy
+
+ Steps:
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/your-repo/number-plate-recognition.git
+    cd number-plate-recognition
+    ```
+
+2. Install the required libraries:
+    ```bash
+    pip install opencv-python pytesseract keras tensorflow numpy
+    ```
+
+3. Download the Haar Cascade XML file:
+   Download the Haar Cascade file for license plate detection from OpenCV's repository:
+   ```bash
+   wget https://github.com/opencv/opencv/blob/master/data/haarcascades/haarcascade_russian_plate_number.xml
+   ```
+
+4. Load the pre-trained CNN model:
+   You can either use a pre-trained CNN model stored as a `.h5` file or train your own. Place the `.h5` file in the project directory.
+
+5. Install Tesseract OCR:
+    - For Windows: Download and install [Tesseract](https://github.com/tesseract-ocr/tesseract).
+    - For Linux: Install via package manager:
+      ```bash
+      sudo apt-get install tesseract-ocr
+      ```
+
+6. Configure Pytesseract: Ensure the path to the Tesseract executable is correctly set in your script:
+    ```python
+    pytesseract.pytesseract.tesseract_cmd = r'path_to_tesseract.exe'
+    ```
+
+ Usage
+
+1. Run the script:
+    ```bash
+    python number_plate_recognition.py
+    ```
+
+2. Input an image or video stream:
+    - The system will prompt you to input an image file path or use a camera.
+
+3. Output:
+    - The system will output the recognized license plate number and display the processed image.
+
+ Example
+```bash
 python number_plate_recognition.py --image examples/car.jpg
-This will load an image of a vehicle and display the extracted license plate number.
+```
 
-Future Enhancements
-Improve detection accuracy in poor lighting and bad weather conditions.
-Integrate machine learning models (e.g., YOLO) to enhance object detection.
-Deploy the system on edge devices with IoT capabilities for real-time monitoring.
-Add a dynamic camera adjustment mechanism to improve recognition in real-time applications.
+This will detect the plate, apply the CNN for fine-tuning, and extract the text.
 
-References
-OpenCV documentation: https://opencv.org/
-Pytesseract documentation: https://pypi.org/project/pytesseract/
-Tesseract-OCR GitHub: https://github.com/tesseract-ocr/tesseract
+ Future Enhancements
+- Retrain the CNN on more diverse datasets to improve recognition in low-light and high-noise conditions.
+- Integrate edge-based IoT solutions for faster real-time deployment.
+- Explore YOLO-based object detection models for a more generalizable solution.
+
+ References
+- OpenCV documentation: [https://opencv.org/](https://opencv.org/)
+- Pytesseract documentation: [https://pypi.org/project/pytesseract/](https://pypi.org/project/pytesseract/)
+- Keras documentation: [https://keras.io/](https://keras.io/)
+- Tesseract-OCR GitHub: [https://github.com/tesseract-ocr/tesseract](https://github.com/tesseract-ocr/tesseract)
+
+---
+
+This updated README now includes the use of both the `.xml` Haar Cascade file for license plate detection and the `.h5` file for the CNN model that enhances the plate localization process.
